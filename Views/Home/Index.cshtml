@@ -1,0 +1,65 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="ee-hero">
+    <h2>Premium booking operations, simplified.</h2>
+    <p>
+        Manage venues, events, and bookings through a refined central platform built to reduce scheduling friction,
+        improve visibility, and support EventEase’s growth with confidence.
+    </p>
+    <div class="mt-4 d-flex gap-2 flex-wrap">
+        <a class="btn btn-primary" asp-controller="Bookings" asp-action="Index">View Bookings</a>
+        <a class="btn btn-warning" asp-controller="Venues" asp-action="Index">Explore Venues</a>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="ee-metric">
+            <div class="ee-metric-label">Platform Focus</div>
+            <div class="ee-metric-value">Admin Control</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="ee-metric">
+            <div class="ee-metric-label">Core Modules</div>
+            <div class="ee-metric-value">3 Active</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="ee-metric">
+            <div class="ee-metric-label">Booking Logic</div>
+            <div class="ee-metric-value">Conflict Aware</div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-4">
+        <div class="ee-card">
+            <div class="ee-card-icon">🏢</div>
+            <h3>Venue Portfolio</h3>
+            <p>Maintain venue names, locations, capacities, and presentation imagery in one polished workspace.</p>
+            <a class="btn btn-primary" asp-controller="Venues" asp-action="Index">Open Venues</a>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="ee-card">
+            <div class="ee-card-icon">✨</div>
+            <h3>Event Scheduling</h3>
+            <p>Create and manage event records with accurate guest planning, timelines, and operational clarity.</p>
+            <a class="btn btn-success" asp-controller="Events" asp-action="Index">Open Events</a>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="ee-card">
+            <div class="ee-card-icon">📅</div>
+            <h3>Booking Oversight</h3>
+            <p>Coordinate venue assignments confidently while protecting the system against overlapping bookings.</p>
+            <a class="btn btn-warning" asp-controller="Bookings" asp-action="Index">Open Bookings</a>
+        </div>
+    </div>
+</div>

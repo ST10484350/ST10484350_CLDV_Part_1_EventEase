@@ -1,0 +1,50 @@
+﻿@model IEnumerable<ST10484350_CLDV_Part_1_EventEase.Models.Event>
+
+@{
+    ViewData["Title"] = "Events";
+}
+
+<div class="ee-section-heading">
+    <div>
+        <h2>Event Management</h2>
+        <p>Manage event details, schedules, guest expectations, and presentation imagery.</p>
+    </div>
+    <a asp-action="Create" class="btn btn-primary">Create New Event</a>
+</div>
+
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Expected Guests</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @if (!string.IsNullOrEmpty(item.ImageUrl))
+                        {
+                            <img src="@item.ImageUrl" class="ee-thumb" alt="Event Image" />
+                        }
+                    </td>
+                    <td>@item.Name</td>
+                    <td>@item.ExpectedGuests</td>
+                    <td>@item.StartDate</td>
+                    <td>@item.EndDate</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.EventId">Details</a> |
+                        <a asp-action="Edit" asp-route-id="@item.EventId">Edit</a> |
+                        <a asp-action="Delete" asp-route-id="@item.EventId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

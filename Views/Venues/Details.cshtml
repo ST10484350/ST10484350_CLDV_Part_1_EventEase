@@ -1,0 +1,31 @@
+﻿@model ST10484350_CLDV_Part_1_EventEase.Models.Venue
+
+@{
+    ViewData["Title"] = "Venue Details";
+}
+
+<h1>Venue Details</h1>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-3">Name</dt>
+        <dd class="col-sm-9">@Model.Name</dd>
+
+        <dt class="col-sm-3">Location</dt>
+        <dd class="col-sm-9">@Model.Location</dd>
+
+        <dt class="col-sm-3">Capacity</dt>
+        <dd class="col-sm-9">@Model.Capacity</dd>
+
+        <dt class="col-sm-3">Image</dt>
+        <dd class="col-sm-9">
+            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <img src="@Model.ImageUrl" width="150" alt="Venue Image" />
+            }
+        </dd>
+    </dl>
+</div>
+
+<a asp-action="Edit" asp-route-id="@Model.VenueId" class="btn btn-primary">Edit</a>
+<a asp-action="Index" class="btn btn-secondary">Back</a>

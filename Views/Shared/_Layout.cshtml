@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - EventEase</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body class="ee-body">
+    <div class="ee-shell">
+        <aside class="ee-sidebar">
+            <div class="ee-brand">
+                <div class="ee-brand-mark">E</div>
+                <div>
+                    <div class="ee-brand-name">EventEase</div>
+                    <div class="ee-brand-subtitle">Venue Management</div>
+                </div>
+            </div>
+
+            <nav class="ee-nav">
+                <a class="ee-nav-link" asp-controller="Home" asp-action="Index">Dashboard</a>
+                <a class="ee-nav-link" asp-controller="Venues" asp-action="Index">Venues</a>
+                <a class="ee-nav-link" asp-controller="Events" asp-action="Index">Events</a>
+                <a class="ee-nav-link" asp-controller="Bookings" asp-action="Index">Bookings</a>
+            </nav>
+
+            <div class="ee-sidebar-footer">
+                <span>EventEase Admin Platform</span>
+            </div>
+        </aside>
+
+        <div class="ee-main">
+            <header class="ee-topbar">
+                <div>
+                    <h1 class="ee-page-title">@ViewData["Title"]</h1>
+                    <p class="ee-page-subtitle">Professional booking and venue operations dashboard</p>
+                </div>
+            </header>
+
+            <main class="ee-content">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

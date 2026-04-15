@@ -1,0 +1,48 @@
+﻿@model IEnumerable<ST10484350_CLDV_Part_1_EventEase.Models.Venue>
+
+@{
+    ViewData["Title"] = "Venues";
+}
+
+<div class="ee-section-heading">
+    <div>
+        <h2>Venue Management</h2>
+        <p>Maintain venue records including names, locations, capacities, and sample image URLs.</p>
+    </div>
+    <a asp-action="Create" class="btn btn-primary">Create New Venue</a>
+</div>
+
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Venue Name</th>
+                <th>Location</th>
+                <th>Capacity</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @if (!string.IsNullOrEmpty(item.ImageUrl))
+                        {
+                            <img src="@item.ImageUrl" class="ee-thumb" alt="Venue Image" />
+                        }
+                    </td>
+                    <td>@item.Name</td>
+                    <td>@item.Location</td>
+                    <td>@item.Capacity</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.VenueId">Details</a> |
+                        <a asp-action="Edit" asp-route-id="@item.VenueId">Edit</a> |
+                        <a asp-action="Delete" asp-route-id="@item.VenueId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,26 @@
+﻿@model ST10484350_CLDV_Part_1_EventEase.Models.Booking
+
+@{
+    ViewData["Title"] = "Booking Details";
+}
+
+<h1>Booking Details</h1>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-3">Customer Name</dt>
+        <dd class="col-sm-9">@Model.CustomerName</dd>
+
+        <dt class="col-sm-3">Venue</dt>
+        <dd class="col-sm-9">@Model.Venue?.Name</dd>
+
+        <dt class="col-sm-3">Event</dt>
+        <dd class="col-sm-9">@Model.Event?.Name</dd>
+
+        <dt class="col-sm-3">Booking Date</dt>
+        <dd class="col-sm-9">@Model.BookingDate</dd>
+    </dl>
+</div>
+
+<a asp-action="Edit" asp-route-id="@Model.BookingId" class="btn btn-primary">Edit</a>
+<a asp-action="Index" class="btn btn-secondary">Back</a>

@@ -4,28 +4,45 @@
     ViewData["Title"] = "Venue Details";
 }
 
-<h1>Venue Details</h1>
+<div class="container py-4">
+    <div class="ee-card shadow-sm p-4" style="background: white; border-radius: 24px;">
+        <div class="row">
+            <div class="col-lg-6">
+                @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                {
+                    <img src="@Model.ImageUrl" class="img-fluid rounded-4 shadow-sm" alt="@Model.Name" style="width: 100%; height: 350px; object-fit: cover;" />
+                }
+                else
+                {
+                    <div class="bg-light rounded-4 d-flex align-items-center justify-content-center" style="width: 100%; height: 350px;">
+                        <i class="bi bi-image fs-1 text-muted opacity-25"></i>
+                    </div>
+                }
+            </div>
+            <div class="col-lg-6 ps-lg-5 mt-4 mt-lg-0">
+                <h1 class="fw-bold mb-3">@Model.Name</h1>
 
-<div>
-    <dl class="row">
-        <dt class="col-sm-3">Name</dt>
-        <dd class="col-sm-9">@Model.Name</dd>
+                <div class="mb-4">
+                    <p class="text-muted mb-1"><i class="bi bi-geo-alt-fill text-danger me-2"></i>Location</p>
+                    <h5 class="fw-semibold">@Model.Location</h5>
+                </div>
 
-        <dt class="col-sm-3">Location</dt>
-        <dd class="col-sm-9">@Model.Location</dd>
+                <div class="mb-4">
+                    <p class="text-muted mb-1"><i class="bi bi-people-fill text-primary me-2"></i>Capacity</p>
+                    <h5 class="fw-semibold">@Model.Capacity People</h5>
+                </div>
 
-        <dt class="col-sm-3">Capacity</dt>
-        <dd class="col-sm-9">@Model.Capacity</dd>
+                <hr class="my-4 opacity-10">
 
-        <dt class="col-sm-3">Image</dt>
-        <dd class="col-sm-9">
-            @if (!string.IsNullOrEmpty(Model.ImageUrl))
-            {
-                <img src="@Model.ImageUrl" width="150" alt="Venue Image" />
-            }
-        </dd>
-    </dl>
+                <div class="d-flex gap-2">
+                    <a asp-action="Edit" asp-route-id="@Model.VenueId" class="btn btn-warning px-4 py-2 text-white">
+                        <i class="bi bi-pencil me-2"></i>Edit Venue
+                    </a>
+                    <a asp-action="Index" class="btn btn-outline-secondary px-4 py-2">
+                        Back to List
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-
-<a asp-action="Edit" asp-route-id="@Model.VenueId" class="btn btn-primary">Edit</a>
-<a asp-action="Index" class="btn btn-secondary">Back</a>

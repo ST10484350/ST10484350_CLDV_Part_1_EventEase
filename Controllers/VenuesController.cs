@@ -2,48 +2,59 @@
 using Microsoft.EntityFrameworkCore;
 using ST10484350_CLDV_Part_1_EventEase.Data;
 using ST10484350_CLDV_Part_1_EventEase.Models;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 
 namespace ST10484350_CLDV_Part_1_EventEase.Controllers
 {
     public class VenuesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly BlobServiceClient _blobServiceClient;
 
-        public VenuesController(ApplicationDbContext context)
+        public VenuesController(ApplicationDbContext context, BlobServiceClient blobServiceClient)
         {
             _context = context;
+            _blobServiceClient = blobServiceClient;
         }
 
-        public async Task<IActionResult> Index()
+        // --- INDEX (With Search) ---
+        public async Task<IActionResult> Index(string searchString)
         {
-            return View(await _context.Venues.ToListAsync());
+            var venuesQuery = from v in _context.Venues select v;
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                // I used LINQ to filter venues by name or location to meet search requirements (Microsoft, 2024).
+                venuesQuery = venuesQuery.Where(s => s.Name.Contains(searchString) || s.Location.Contains(searchString));
+            }
+
+            return View(await venuesQuery.ToListAsync());
         }
 
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null) return NotFound();
-
-            var venue = await _context.Venues
-                .Include(v => v.Bookings!)
-                .ThenInclude(b => b.Event)
-                .FirstOrDefaultAsync(m => m.VenueId == id);
-
-            if (venue == null) return NotFound();
-
-            return View(venue);
-        }
-
-        public IActionResult Create()
-        {
-            return View();
-        }
+        public IActionResult Create() => View();
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("VenueId,Name,Location,Capacity,ImageUrl")] Venue venue)
+        public async Task<IActionResult> Create([Bind("VenueId,Name,Location,Capacity,ImageFile")] Venue venue)
         {
             if (ModelState.IsValid)
             {
+                if (venue.ImageFile != null)
+                {
+                    var containerClient = _blobServiceClient.GetBlobContainerClient("venue-images");
+                    await containerClient.CreateIfNotExistsAsync(PublicAccessType.Blob);
+
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(venue.ImageFile.FileName);
+                    var blobClient = containerClient.GetBlobClient(fileName);
+
+                    using (var stream = venue.ImageFile.OpenReadStream())
+                    {
+                        await blobClient.UploadAsync(stream, true);
+                    }
+                    venue.ImageUrl = blobClient.Uri.ToString();
+                }
+
                 _context.Add(venue);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -51,13 +62,19 @@ namespace ST10484350_CLDV_Part_1_EventEase.Controllers
             return View(venue);
         }
 
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null) return NotFound();
+            var venue = await _context.Venues.FirstOrDefaultAsync(m => m.VenueId == id);
+            if (venue == null) return NotFound();
+            return View(venue);
+        }
+
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
-
             var venue = await _context.Venues.FindAsync(id);
             if (venue == null) return NotFound();
-
             return View(venue);
         }
 
@@ -76,27 +93,19 @@ namespace ST10484350_CLDV_Part_1_EventEase.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!_context.Venues.Any(e => e.VenueId == venue.VenueId))
-                        return NotFound();
-                    else
-                        throw;
+                    if (!_context.Venues.Any(e => e.VenueId == venue.VenueId)) return NotFound();
+                    else throw;
                 }
-
                 return RedirectToAction(nameof(Index));
             }
-
             return View(venue);
         }
 
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
-
-            var venue = await _context.Venues
-                .FirstOrDefaultAsync(m => m.VenueId == id);
-
+            var venue = await _context.Venues.FirstOrDefaultAsync(m => m.VenueId == id);
             if (venue == null) return NotFound();
-
             return View(venue);
         }
 
@@ -112,13 +121,12 @@ namespace ST10484350_CLDV_Part_1_EventEase.Controllers
 
             if (venue.Bookings != null && venue.Bookings.Any())
             {
-                ModelState.AddModelError("", "This venue cannot be deleted because it has existing bookings.");
-                return View(venue);
+                TempData["Error"] = "Validation Error: This venue has active bookings and cannot be deleted.";
+                return RedirectToAction(nameof(Index));
             }
 
             _context.Venues.Remove(venue);
             await _context.SaveChangesAsync();
-
             return RedirectToAction(nameof(Index));
         }
     }

@@ -4,36 +4,76 @@
     ViewData["Title"] = "Bookings";
 }
 
-<h1>Bookings</h1>
+<style>
+    .booking-item {
+        background: white;
+        border-radius: 18px;
+        border: 1px solid rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+        padding: 20px;
+        margin-bottom: 1rem;
+    }
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Create New Booking</a>
-</p>
+        .booking-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border-color: #6366f1;
+        }
 
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Customer Name</th>
-            <th>Venue</th>
-            <th>Event</th>
-            <th>Booking Date</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
+    .id-tag {
+        background: #f1f5f9;
+        color: #475569;
+        font-weight: 700;
+        padding: 5px 12px;
+        border-radius: 10px;
+        font-size: 0.85rem;
+    }
+</style>
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold text-dark">Active Bookings</h2>
+            <p class="text-muted">Real-time schedule of all venue reservations.</p>
+        </div>
+        <a asp-action="Create" class="btn btn-success btn-lg shadow-sm">
+            <i class="bi bi-journal-plus me-2"></i>New Reservation
+        </a>
+    </div>
+
+    @* Part 2 Search Bar *@
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <form asp-action="Index" method="get" class="d-flex shadow-sm rounded-pill overflow-hidden bg-white p-1">
+                <input type="text" name="searchString" class="form-control border-0 px-4" placeholder="Search by ID or Event Name..." />
+                <button type="submit" class="btn btn-primary rounded-pill px-4">Search</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="booking-list">
         @foreach (var item in Model)
         {
-            <tr>
-                <td>@item.CustomerName</td>
-                <td>@item.Venue?.Name</td>
-                <td>@item.Event?.Name</td>
-                <td>@item.BookingDate</td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.BookingId">Details</a> |
-                    <a asp-action="Edit" asp-route-id="@item.BookingId">Edit</a> |
-                    <a asp-action="Delete" asp-route-id="@item.BookingId">Delete</a>
-                </td>
-            </tr>
+            <div class="booking-item d-flex flex-column flex-md-row align-items-center">
+                <div class="me-md-4 mb-3 mb-md-0">
+                    <span class="id-tag">#@item.BookingId</span>
+                </div>
+
+                <div class="flex-grow-1">
+                    <h5 class="fw-bold mb-1">@item.CustomerName</h5>
+                    <div class="d-flex flex-wrap gap-3 small text-muted">
+                        <span><i class="bi bi-geo-alt me-1"></i> @item.Venue?.Name</span>
+                        <span><i class="bi bi-star me-1"></i> @item.Event?.Name</span>
+                        <span><i class="bi bi-calendar-event me-1"></i> @item.BookingDate.ToString("MMM dd, yyyy HH:mm")</span>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2 mt-3 mt-md-0">
+                    <a asp-action="Details" asp-route-id="@item.BookingId" class="btn btn-sm btn-outline-primary">Details</a>
+                    <a asp-action="Edit" asp-route-id="@item.BookingId" class="btn btn-sm btn-warning">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@item.BookingId" class="btn btn-sm btn-danger">Delete</a>
+                </div>
+            </div>
         }
-    </tbody>
-</table>
+    </div>
+</div>

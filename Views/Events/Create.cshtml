@@ -4,53 +4,63 @@
     ViewData["Title"] = "Create Event";
 }
 
-<h1>Create Event</h1>
+<div class="container py-4">
+    <div class="ee-card p-4 mx-auto" style="max-width: 800px;">
+        <h1 class="fw-bold mb-4 text-primary">Create Event</h1>
 
-<form asp-action="Create">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <form asp-action="Create" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-    <div class="mb-3">
-        <label asp-for="Name" class="form-label"></label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
+            <div class="row g-3">
+                <div class="col-md-12">
+                    <label asp-for="Name" class="form-label fw-bold"></label>
+                    <input asp-for="Name" class="form-control" placeholder="e.g. Annual Gala" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-12">
+                    <label asp-for="VenueId" class="form-label fw-bold">Primary Venue</label>
+                    <select asp-for="VenueId" class="form-select" asp-items="ViewBag.VenueId">
+                        <option value="">-- Assign a Venue --</option>
+                    </select>
+                    <span asp-validation-for="VenueId" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-12">
+                    <label asp-for="Description" class="form-label fw-bold"></label>
+                    <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-4">
+                    <label asp-for="ExpectedGuests" class="form-label fw-bold"></label>
+                    <input asp-for="ExpectedGuests" class="form-control" />
+                    <span asp-validation-for="ExpectedGuests" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-4">
+                    <label asp-for="StartDate" class="form-label fw-bold"></label>
+                    <input asp-for="StartDate" class="form-control" />
+                    <span asp-validation-for="StartDate" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-4">
+                    <label asp-for="EndDate" class="form-label fw-bold"></label>
+                    <input asp-for="EndDate" class="form-control" />
+                    <span asp-validation-for="EndDate" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-12">
+                    <label class="form-label fw-bold">Upload Event Image</label>
+                    <input type="file" name="imageFile" class="form-control" accept="image/*" />
+                    <small class="text-muted">High-resolution posters recommended.</small>
+                </div>
+            </div>
+
+            <div class="mt-5 d-flex gap-2">
+                <button type="submit" class="btn btn-success px-5 shadow-sm">Save Event</button>
+                <a asp-action="Index" class="btn btn-outline-secondary px-4">Cancel</a>
+            </div>
+        </form>
     </div>
-
-    <div class="mb-3">
-        <label asp-for="Description" class="form-label"></label>
-        <input asp-for="Description" class="form-control" />
-        <span asp-validation-for="Description" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="ExpectedGuests" class="form-label"></label>
-        <input asp-for="ExpectedGuests" class="form-control" />
-        <span asp-validation-for="ExpectedGuests" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="StartDate" class="form-label"></label>
-        <input asp-for="StartDate" class="form-control" />
-        <span asp-validation-for="StartDate" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="EndDate" class="form-label"></label>
-        <input asp-for="EndDate" class="form-control" />
-        <span asp-validation-for="EndDate" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="ImageUrl" class="form-label"></label>
-        <input asp-for="ImageUrl" class="form-control" />
-        <span asp-validation-for="ImageUrl" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Create</button>
-    <a asp-action="Index" class="btn btn-secondary">Back</a>
-</form>
-
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
+</div>

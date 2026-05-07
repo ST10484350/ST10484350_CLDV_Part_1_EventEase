@@ -26,9 +26,16 @@ namespace ST10484350_CLDV_Part_1_EventEase.Models
         [DataType(DataType.DateTime)]
         public DateTime EndDate { get; set; }
 
-        [Display(Name = "Image URL")]
-        [Url]
+        [Display(Name = "Event Poster")]
         public string? ImageUrl { get; set; }
+
+        // --- NEW: Link to Venue ---
+        [Required(ErrorMessage = "Please assign a venue to this event")]
+        [Display(Name = "Assigned Venue")]
+        public int? VenueId { get; set; }
+
+        public Venue? Venue { get; set; }
+        // -------------------------
 
         public ICollection<Booking>? Bookings { get; set; }
 

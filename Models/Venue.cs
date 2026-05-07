@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema; // Required for [NotMapped]
 
 namespace ST10484350_CLDV_Part_1_EventEase.Models
 {
@@ -18,9 +19,14 @@ namespace ST10484350_CLDV_Part_1_EventEase.Models
         [Range(1, 100000)]
         public int Capacity { get; set; }
 
-        [Display(Name = "Image URL")]
-        [Url]
+        // This stays as a string to store the URL in the database
+        [Display(Name = "Venue Image")]
         public string? ImageUrl { get; set; }
+
+        // This is the NEW part: It handles the file upload but is NOT saved to the database
+        [NotMapped]
+        [Display(Name = "Upload Image")]
+        public IFormFile? ImageFile { get; set; }
 
         public ICollection<Booking>? Bookings { get; set; }
     }

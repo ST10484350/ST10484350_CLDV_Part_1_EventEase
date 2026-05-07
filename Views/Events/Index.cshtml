@@ -4,47 +4,77 @@
     ViewData["Title"] = "Events";
 }
 
-<div class="ee-section-heading">
-    <div>
-        <h2>Event Management</h2>
-        <p>Manage event details, schedules, guest expectations, and presentation imagery.</p>
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold text-dark">Event Portfolio</h2>
+            <p class="text-muted">Overview of scheduled events and guest expectations.</p>
+        </div>
+        <a asp-action="Create" class="btn btn-success btn-lg shadow-sm">
+            <i class="bi bi-calendar-plus me-2"></i>Create New Event
+        </a>
     </div>
-    <a asp-action="Create" class="btn btn-primary">Create New Event</a>
-</div>
 
-<div class="table-responsive">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Image</th>
-                <th>Name</th>
-                <th>Expected Guests</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
+    <div class="mb-4">
+        <form asp-action="Index" method="get" class="row g-2">
+            <div class="col-md-5">
+                <input type="text" name="searchString" class="form-control shadow-sm" placeholder="Search events by name or description..." />
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary shadow-sm px-4">Filter</button>
+            </div>
+            <div class="col-auto">
+                <a asp-action="Index" class="btn btn-light border shadow-sm">Clear</a>
+            </div>
+        </form>
+    </div>
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+            <i class="bi bi-exclamation-octagon-fill me-2"></i>@TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        @foreach (var item in Model)
+        {
+            <div class="col">
+                <div class="ee-card h-100 p-0 overflow-hidden shadow-sm">
+                    <div style="height: 180px; width: 100%; background: #f1f5f9;">
                         @if (!string.IsNullOrEmpty(item.ImageUrl))
                         {
-                            <img src="@item.ImageUrl" class="ee-thumb" alt="Event Image" />
+                            <img src="@item.ImageUrl" style="width: 100%; height: 100%; object-fit: cover;" alt="@item.Name" />
                         }
-                    </td>
-                    <td>@item.Name</td>
-                    <td>@item.ExpectedGuests</td>
-                    <td>@item.StartDate</td>
-                    <td>@item.EndDate</td>
-                    <td>
-                        <a asp-action="Details" asp-route-id="@item.EventId">Details</a> |
-                        <a asp-action="Edit" asp-route-id="@item.EventId">Edit</a> |
-                        <a asp-action="Delete" asp-route-id="@item.EventId">Delete</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+                        else
+                        {
+                            <div class="h-100 d-flex align-items-center justify-content-center text-muted">
+                                <i class="bi bi-calendar-event fs-1 opacity-25"></i>
+                            </div>
+                        }
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h4 class="fw-bold mb-0">@item.Name</h4>
+                            <span class="badge bg-light text-primary border rounded-pill">@item.ExpectedGuests guests</span>
+                        </div>
+                        <div class="small mb-3">
+                            <i class="bi bi-geo-alt-fill text-danger me-1"></i>
+                            <span class="fw-semibold">@(item.Venue?.Name ?? "No Venue Assigned")</span>
+                        </div>
+                        <p class="text-muted small mb-3" style="height: 40px; overflow: hidden;">@item.Description</p>
+                        <div class="mb-4 small text-secondary">
+                            <div><i class="bi bi-calendar3 me-2 text-primary"></i> @item.StartDate.ToString("MMM dd") - @item.EndDate.ToString("MMM dd, yyyy")</div>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <a asp-action="Details" asp-route-id="@item.EventId" class="btn btn-sm btn-outline-primary w-100">Details</a>
+                            <a asp-action="Edit" asp-route-id="@item.EventId" class="btn btn-sm btn-warning text-white w-100">Edit</a>
+                            <a asp-action="Delete" asp-route-id="@item.EventId" class="btn btn-sm btn-danger w-100">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 </div>
